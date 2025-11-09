@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing
+namespace PosInformatique.Foundations.Emailing
 {
     public interface IEmailProvider
     {
-        Task SendAsync(EmailMessage message, CancellationToken cancellationToken);
+        Task SendAsync(EmailMessage message, CancellationToken cancellationToken = default);
     }
 }

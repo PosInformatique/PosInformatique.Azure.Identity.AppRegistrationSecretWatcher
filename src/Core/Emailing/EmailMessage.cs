@@ -4,12 +4,24 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing
+namespace PosInformatique.Foundations.Emailing
 {
-    public class EmailMessage
+    public sealed class EmailMessage
     {
-        public EmailMessage()
+        public EmailMessage(EmailContact from, EmailContact to, string subject, string htmlContent)
         {
+            this.From = from;
+            this.To = to;
+            this.Subject = subject;
+            this.HtmlContent = htmlContent;
         }
+
+        public EmailContact From { get; }
+
+        public EmailContact To { get; }
+
+        public string Subject { get; }
+
+        public string HtmlContent { get; }
     }
 }
