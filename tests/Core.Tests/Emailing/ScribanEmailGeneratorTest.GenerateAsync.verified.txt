@@ -1,0 +1,153 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .tenant {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tenant h2 {
+            margin-bottom: 10px;
+        }
+
+        .application {
+            margin-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        .application h3 {
+            margin-bottom: 8px;
+        }
+
+        .secret {
+            margin-left: 20px;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .expired {
+            background-color: #ffd6d6;
+        }
+
+        .expiring-soon {
+            background-color: #fff3cd;
+        }
+
+        .valid {
+            background-color: #d7f9d7;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Entra ID app registrations secret expiration report</h1>
+
+    
+
+    
+            <div class="tenant">
+                <h2>The tenant 1 (Id 1)</h2>
+    
+                
+                            <div class="application">
+                                <h3>The app 1-1 (Id 1-1)</h3>
+            
+                                
+                                            <div class="secret expired">
+                                                <div>Display name: Secret 1-1-1</div>
+                                                <div>Status: <span class="status">Expired</span></div>
+                                                <div>Expiration date:  1-Jan-2025</div>
+                                                
+                                                            <div>Expired since: 10 days</div>
+                                                        
+                                            </div>
+                                        
+                                            <div class="secret valid">
+                                                <div>Display name: Secret 1-1-2</div>
+                                                <div>Status: <span class="status">Valid</span></div>
+                                                <div>Expiration date:  2-Feb-2025</div>
+                                                
+                                                            <div>Days before expiration: 20 days</div>
+                                                        
+                                            </div>
+                                        
+                            </div>
+                        
+                            <div class="application">
+                                <h3>The app 1-2 (Id 1-2)</h3>
+            
+                                
+                                            <div class="secret valid">
+                                                <div>Display name: Secret 1-2-1</div>
+                                                <div>Status: <span class="status">Valid</span></div>
+                                                <div>Expiration date:  3-Mar-2025</div>
+                                                
+                                                            <div>Days before expiration: 30 days</div>
+                                                        
+                                            </div>
+                                        
+                                            <div class="secret expiring-soon">
+                                                <div>Display name: Secret 1-2-2</div>
+                                                <div>Status: <span class="status">ExpiringSoon</span></div>
+                                                <div>Expiration date:  4-Apr-2025</div>
+                                                
+                                                            <div>Days before expiration: 40 days</div>
+                                                        
+                                            </div>
+                                        
+                            </div>
+                        
+            </div>
+        
+            <div class="tenant">
+                <h2>The tenant 2 (Id 2)</h2>
+    
+                
+                            <div class="application">
+                                <h3>The app 2-1 (Id 2-1)</h3>
+            
+                                
+                                            <div class="secret valid">
+                                                <div>Display name: Secret 2-1-1</div>
+                                                <div>Status: <span class="status">Valid</span></div>
+                                                <div>Expiration date:  5-May-2025</div>
+                                                
+                                                            <div>Days before expiration: 50 days</div>
+                                                        
+                                            </div>
+                                        
+                            </div>
+                        
+                            <div class="application">
+                                <h3>The app 2-2 (Id 2-2)</h3>
+            
+                                
+                                            <div class="secret valid">
+                                                <div>Display name: Secret 2-1-1</div>
+                                                <div>Status: <span class="status">Valid</span></div>
+                                                <div>Expiration date:  6-Jun-2025</div>
+                                                
+                                                            <div>Days before expiration: 60 days</div>
+                                                        
+                                            </div>
+                                        
+                            </div>
+                        
+            </div>
+        
+</body>
+</html>

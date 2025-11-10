@@ -1,0 +1,97 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .tenant {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tenant h2 {
+            margin-bottom: 10px;
+        }
+
+        .application {
+            margin-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        .application h3 {
+            margin-bottom: 8px;
+        }
+
+        .secret {
+            margin-left: 20px;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .expired {
+            background-color: #ffd6d6;
+        }
+
+        .expiring-soon {
+            background-color: #fff3cd;
+        }
+
+        .valid {
+            background-color: #d7f9d7;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Entra ID app registrations secret expiration report</h1>
+
+    {{
+     func status_to_css(status)
+         case status
+           when "Expired"
+             "expired"
+           when "ExpiringSoon"
+             "expiring-soon"
+           else
+             "valid"
+         end
+      end
+    }}
+
+    {{ for tenant in Tenants }}
+        <div class="tenant">
+            <h2>{{ tenant.DisplayName }} ({{ tenant.Id }})</h2>
+
+            {{ for application in tenant.Applications }}
+                <div class="application">
+                    <h3>{{ application.DisplayName }} ({{ application.Id }})</h3>
+
+                    {{ for secret in application.Secrets }}
+                        <div class="secret {{ status_to_css secret.Status }}">
+                            <div>Display name: {{ secret.DisplayName }}</div>
+                            <div>Status: <span class="status">{{ secret.Status }}</span></div>
+                            <div>Expiration date: {{ secret.EndDate | date.to_string '%e-%b-%Y' }}</div>
+                            {{ if secret.DaysBeforeExpiration > 0 }}
+                                <div>Days before expiration: {{ secret.DaysBeforeExpiration }} days</div>
+                            {{ else }}
+                                <div>Expired since: {{ -secret.DaysBeforeExpiration }} days</div>
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
+            {{ end }}
+        </div>
+    {{ end }}
+</body>
+</html>

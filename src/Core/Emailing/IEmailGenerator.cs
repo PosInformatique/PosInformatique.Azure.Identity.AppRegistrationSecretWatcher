@@ -8,6 +8,6 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing
 {
     public interface IEmailGenerator
     {
-        string Generate(AppRegistrationSecretCheckResult result);
+        Task<string> GenerateAsync(AppRegistrationSecretCheckResult result, CancellationToken cancellationToken = default);
     }
 }
