@@ -11,7 +11,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
         [Fact]
         public void Constructor()
         {
-            var options = new GraphEntraIdApplicationClientOptions();
+            var options = new GraphEntraIdClientOptions();
 
             options.ClientId.Should().BeNull();
             options.ClientSecret.Should().BeNull();
@@ -20,7 +20,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
         [Fact]
         public void ClientId_ValueChanged()
         {
-            var options = new GraphEntraIdApplicationClientOptions();
+            var options = new GraphEntraIdClientOptions();
 
             options.ClientId = "The client ID";
 
@@ -30,7 +30,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
         [Fact]
         public void ClientSecret_ValueChanged()
         {
-            var options = new GraphEntraIdApplicationClientOptions();
+            var options = new GraphEntraIdClientOptions();
 
             options.ClientSecret = "The client secret";
 

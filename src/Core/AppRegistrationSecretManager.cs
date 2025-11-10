@@ -13,7 +13,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 
     public class AppRegistrationSecretManager : IAppRegistrationSecretManager
     {
-        private readonly IEntraIdApplicationClient entraIdApplicationClient;
+        private readonly IEntraIdClient entraIdApplicationClient;
 
         private readonly IEmailProvider emailProvider;
 
@@ -23,7 +23,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 
         private readonly TimeProvider timeProvider;
 
-        public AppRegistrationSecretManager(IEntraIdApplicationClient entraIdApplicationClient, IEmailProvider emailProvider, IEmailGenerator emailGenerator, TimeProvider timeProvider, IOptions<AppRegistrationSecretManagerOptions> options)
+        public AppRegistrationSecretManager(IEntraIdClient entraIdApplicationClient, IEmailProvider emailProvider, IEmailGenerator emailGenerator, TimeProvider timeProvider, IOptions<AppRegistrationSecretManagerOptions> options)
         {
             this.entraIdApplicationClient = entraIdApplicationClient;
             this.emailProvider = emailProvider;
@@ -49,28 +49,21 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             return result;
         }
 
-        private async Task<IReadOnlyList<TenantApplications>> GetApplicationsByTenantAsync(AppRegistrationSecretCheckParameters parameters, CancellationToken cancellationToken)
+        private async Task<IReadOnlyList<EntraIdTenant>> GetApplicationsByTenantAsync(AppRegistrationSecretCheckParameters parameters, CancellationToken cancellationToken)
         {
-            var applicationsTask = new List<Task<IReadOnlyList<EntraIdApplication>>>(parameters.TenantIds.Count);
+            var tenantTasks = new List<Task<EntraIdTenant>>(parameters.TenantIds.Count);
 
             foreach (var tenantId in parameters.TenantIds)
             {
-                applicationsTask.Add(this.entraIdApplicationClient.GetAsync(tenantId, cancellationToken));
+                tenantTasks.Add(this.entraIdApplicationClient.GetApplicationsAsync(tenantId, cancellationToken));
             }
 
-            await Task.WhenAll(applicationsTask);
+            await Task.WhenAll(tenantTasks);
 
-            var result = new List<TenantApplications>(parameters.TenantIds.Count);
-
-            for (int i = 0; i < parameters.TenantIds.Count; i++)
-            {
-                result.Add(new TenantApplications(parameters.TenantIds[i], applicationsTask[i].Result));
-            }
-
-            return result;
+            return tenantTasks.Select(t => t.Result).ToArray();
         }
 
-        private AppRegistrationSecretCheckResult BuildResult(IReadOnlyList<TenantApplications> tenants, DateTime expirationDateLimit)
+        private AppRegistrationSecretCheckResult BuildResult(IReadOnlyList<EntraIdTenant> tenants, DateTime expirationDateLimit)
         {
             var tenantsResult = new List<AppRegistrationSecretCheckResultTenant>(tenants.Count);
 
@@ -78,6 +71,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             {
                 var tenantResult = new AppRegistrationSecretCheckResultTenant(
                     tenant.Id,
+                    tenant.DisplayName,
                     tenant.Applications
                         .Select(app => this.Build(app, expirationDateLimit))
                         .OrderBy(app => app.DisplayName)
@@ -124,19 +118,6 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 
                 await this.emailProvider.SendAsync(message, cancellationToken);
             }
-        }
-
-        private sealed class TenantApplications
-        {
-            public TenantApplications(string id, IReadOnlyList<EntraIdApplication> applications)
-            {
-                this.Applications = applications;
-                this.Id = id;
-            }
-
-            public string Id { get; }
-
-            public IReadOnlyList<EntraIdApplication> Applications { get; }
         }
     }
 }

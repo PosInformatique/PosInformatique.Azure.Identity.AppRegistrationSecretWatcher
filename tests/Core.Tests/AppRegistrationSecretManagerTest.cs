@@ -26,41 +26,47 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
 
             var sender = new EmailContact(default, default);
 
-            var entraIdClient = new Mock<IEntraIdApplicationClient>(MockBehavior.Strict);
-            entraIdClient.Setup(c => c.GetAsync("Tenant 1", cancellationToken))
+            var entraIdClient = new Mock<IEntraIdClient>(MockBehavior.Strict);
+            entraIdClient.Setup(c => c.GetApplicationsAsync("Tenant 1", cancellationToken))
                 .ReturnsAsync(
-                [
-                    new EntraIdApplication(
-                        "1-1",
-                        "App 1-1",
+                    new EntraIdTenant(
+                        "The tenant ID 1",
+                        "The tenant display name 1",
                         [
-                            new EntraIdApplicationPasswordCredential("Secret 1-1-1", now.AddDays(60)),
-                            new EntraIdApplicationPasswordCredential("Secret 1-1-2", now.AddDays(10)),
-                        ]),
-                    new EntraIdApplication(
-                        "1-2",
-                        "App 1-2",
-                        [
-                            new EntraIdApplicationPasswordCredential("Secret 1-2-1", now.AddDays(30)),
-                            new EntraIdApplicationPasswordCredential("Secret 1-2-2", now.AddDays(120)),
-                        ])
-                ]);
-            entraIdClient.Setup(c => c.GetAsync("Tenant 2", cancellationToken))
+                            new EntraIdApplication(
+                                "1-1",
+                                "App 1-1",
+                                [
+                                    new EntraIdApplicationPasswordCredential("Secret 1-1-1", now.AddDays(60)),
+                                    new EntraIdApplicationPasswordCredential("Secret 1-1-2", now.AddDays(10)),
+                                ]),
+                            new EntraIdApplication(
+                                "1-2",
+                                "App 1-2",
+                                [
+                                    new EntraIdApplicationPasswordCredential("Secret 1-2-1", now.AddDays(30)),
+                                    new EntraIdApplicationPasswordCredential("Secret 1-2-2", now.AddDays(120)),
+                                ])
+                        ]));
+            entraIdClient.Setup(c => c.GetApplicationsAsync("Tenant 2", cancellationToken))
                 .ReturnsAsync(
-                [
-                    new EntraIdApplication(
-                        "2-1",
-                        "App 2-1",
+                    new EntraIdTenant(
+                        "The tenant ID 2",
+                        "The tenant display name 2",
                         [
-                            new EntraIdApplicationPasswordCredential("Secret 2-1-1", now.AddDays(100)),
-                        ]),
-                    new EntraIdApplication(
-                        "2-2",
-                        "App 2-2",
-                        [
-                            new EntraIdApplicationPasswordCredential("Secret 2-2-1", now.AddDays(300)),
-                        ])
-                ]);
+                            new EntraIdApplication(
+                                "2-1",
+                                "App 2-1",
+                                [
+                                    new EntraIdApplicationPasswordCredential("Secret 2-1-1", now.AddDays(100)),
+                                ]),
+                            new EntraIdApplication(
+                                "2-2",
+                                "App 2-2",
+                                [
+                                    new EntraIdApplicationPasswordCredential("Secret 2-2-1", now.AddDays(300)),
+                                ])
+                        ]));
 
             var emailProvider = new Mock<IEmailProvider>(MockBehavior.Strict);
             emailProvider.Setup(ep => ep.SendAsync(It.Is<EmailMessage>(m => m.To.Email.ToString() == "email1@domain.com"), cancellationToken))
@@ -88,7 +94,8 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 {
                     r.Tenants.Should().HaveCount(2);
 
-                    r.Tenants[0].Id.Should().Be("Tenant 1");
+                    r.Tenants[0].DisplayName.Should().Be("The tenant display name 1");
+                    r.Tenants[0].Id.Should().Be("The tenant ID 1");
                     r.Tenants[0].Applications.Should().HaveCount(2);
                     r.Tenants[0].Applications[0].DisplayName.Should().Be("App 1-1");
                     r.Tenants[0].Applications[0].Secrets.Should().HaveCount(2);
@@ -107,7 +114,8 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     r.Tenants[0].Applications[1].Secrets[1].EndDate.Should().Be(now.AddDays(120).AddHours(8)).And.BeIn(DateTimeKind.Local);
                     r.Tenants[0].Applications[1].Secrets[1].Expired.Should().BeFalse();
 
-                    r.Tenants[1].Id.Should().Be("Tenant 2");
+                    r.Tenants[1].DisplayName.Should().Be("The tenant display name 2");
+                    r.Tenants[1].Id.Should().Be("The tenant ID 2");
                     r.Tenants[1].Applications.Should().HaveCount(2);
                     r.Tenants[1].Applications[0].DisplayName.Should().Be("App 2-1");
                     r.Tenants[1].Applications[0].Secrets.Should().HaveCount(1);

@@ -13,9 +13,9 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId
 
     public class GraphServiceClientFactory : IGraphServiceClientFactory
     {
-        private readonly GraphEntraIdApplicationClientOptions options;
+        private readonly GraphEntraIdClientOptions options;
 
-        public GraphServiceClientFactory(IOptions<GraphEntraIdApplicationClientOptions> options)
+        public GraphServiceClientFactory(IOptions<GraphEntraIdClientOptions> options)
         {
             this.options = options.Value;
         }
