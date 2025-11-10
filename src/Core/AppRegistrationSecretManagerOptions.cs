@@ -6,17 +6,17 @@
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 {
-    using PosInformatique.Foundations.Emailing;
+    using PosInformatique.Foundations.EmailAddresses;
 
     public class AppRegistrationSecretManagerOptions
     {
         public AppRegistrationSecretManagerOptions()
         {
-            this.EmailRecipients = new Collection<EmailContact>();
+            this.EmailRecipients = new Collection<EmailAddress>();
         }
 
-        public EmailContact EmailSender { get; set; } = default!;
+        public EmailAddress EmailSender { get; set; } = default!;
 
-        public Collection<EmailContact> EmailRecipients { get; }
+        public Collection<EmailAddress> EmailRecipients { get; }
     }
 }

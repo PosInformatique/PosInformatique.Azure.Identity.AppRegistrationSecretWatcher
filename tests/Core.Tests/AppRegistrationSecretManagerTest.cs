@@ -23,8 +23,6 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
 
             AppRegistrationSecretCheckResult expectedResult = null;
 
-            var sender = new EmailContact(default, default);
-
             var entraIdClient = new Mock<IEntraIdClient>(MockBehavior.Strict);
             entraIdClient.Setup(c => c.GetApplicationsAsync("Tenant 1", cancellationToken))
                 .ReturnsAsync(
@@ -72,18 +70,20 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 .Callback((EmailMessage m, CancellationToken _) =>
                 {
                     m.HtmlContent.Should().Be("The content");
-                    m.From.Should().BeSameAs(sender);
+                    m.From.DisplayName.Should().BeEmpty();
+                    m.From.Email.Should().Be(EmailAddress.Parse("sender@domain.com"));
                     m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [15/06/2025]");
-                    m.To.DisplayName.Should().Be("Email 1");
+                    m.To.DisplayName.Should().BeEmpty();
                 })
                 .Returns(Task.CompletedTask);
             emailProvider.Setup(ep => ep.SendAsync(It.Is<EmailMessage>(m => m.To.Email.ToString() == "email2@domain.com"), cancellationToken))
                 .Callback((EmailMessage m, CancellationToken _) =>
                 {
                     m.HtmlContent.Should().Be("The content");
-                    m.From.Should().BeSameAs(sender);
+                    m.From.DisplayName.Should().BeEmpty();
+                    m.From.Email.Should().Be(EmailAddress.Parse("sender@domain.com"));
                     m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [15/06/2025]");
-                    m.To.DisplayName.Should().Be("Email 2");
+                    m.To.DisplayName.Should().BeEmpty();
                 })
                 .Returns(Task.CompletedTask);
 
@@ -151,10 +151,10 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
             {
                 EmailRecipients =
                 {
-                    new EmailContact(EmailAddress.Parse("email1@domain.com"), "Email 1"),
-                    new EmailContact(EmailAddress.Parse("email2@domain.com"), "Email 2"),
+                    EmailAddress.Parse("email1@domain.com"),
+                    EmailAddress.Parse("email2@domain.com"),
                 },
-                EmailSender = sender,
+                EmailSender = EmailAddress.Parse("sender@domain.com"),
             });
 
             var parameters = new AppRegistrationSecretCheckParameters()

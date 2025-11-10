@@ -6,7 +6,7 @@
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
 {
-    using PosInformatique.Foundations.Emailing;
+    using PosInformatique.Foundations.EmailAddresses;
 
     public class AppRegistrationSecretManagerOptionsTest
     {
@@ -24,7 +24,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
         {
             var options = new AppRegistrationSecretManagerOptions();
 
-            var sender = new EmailContact(default, default);
+            var sender = EmailAddress.Parse("email@domain.com");
 
             options.EmailSender = sender;
 

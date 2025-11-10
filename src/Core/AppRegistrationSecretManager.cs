@@ -120,7 +120,11 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 
             foreach (var recipient in this.options.EmailRecipients)
             {
-                var message = new EmailMessage(this.options.EmailSender, recipient, $"Reminder: App Registration secrets expiring soon - [{todayLocal:d}]", emailContent);
+                var message = new EmailMessage(
+                    new EmailContact(this.options.EmailSender, string.Empty),
+                    new EmailContact(recipient, string.Empty),
+                    $"Reminder: App Registration secrets expiring soon - [{todayLocal:d}]",
+                    emailContent);
 
                 await this.emailProvider.SendAsync(message, cancellationToken);
             }
