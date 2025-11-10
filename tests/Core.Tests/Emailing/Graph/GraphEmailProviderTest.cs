@@ -7,8 +7,8 @@
 namespace PosInformatique.Foundations.Emailing.Graph.Tests
 {
     using Microsoft.Graph;
-    using Microsoft.Graph.Me.SendMail;
     using Microsoft.Graph.Models;
+    using Microsoft.Graph.Users.Item.SendMail;
     using Microsoft.Kiota.Abstractions;
     using Microsoft.Kiota.Abstractions.Serialization;
     using Microsoft.Kiota.Serialization.Json;
@@ -34,15 +34,13 @@ namespace PosInformatique.Foundations.Emailing.Graph.Tests
                 .Callback((RequestInformation requestInfo, Dictionary<string, ParsableFactory<IParsable>> _, CancellationToken _) =>
                 {
                     requestInfo.HttpMethod.Should().Be(Method.POST);
-                    requestInfo.URI.Should().Be("http://base/url/me/sendMail");
+                    requestInfo.URI.Should().Be("http://base/url/users/sender%40domain.com/sendMail");
 
                     var jsonMessage = KiotaJsonSerializer.DeserializeAsync<SendMailPostRequestBody>(requestInfo.Content).GetAwaiter().GetResult();
 
                     jsonMessage.Message.Attachments.Should().BeNull();
                     jsonMessage.Message.Body.Content.Should().Be("The HTML content");
                     jsonMessage.Message.Body.ContentType.Should().Be(BodyType.Html);
-                    jsonMessage.Message.From.EmailAddress.Address.Should().Be("sender@domain.com");
-                    jsonMessage.Message.From.EmailAddress.Name.Should().Be("The sender");
                     jsonMessage.Message.BccRecipients.Should().BeNull();
                     jsonMessage.Message.CcRecipients.Should().BeNull();
                     jsonMessage.Message.ToRecipients.Should().HaveCount(1);

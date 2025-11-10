@@ -7,8 +7,8 @@
 namespace PosInformatique.Foundations.Emailing.Graph
 {
     using Microsoft.Graph;
-    using Microsoft.Graph.Me.SendMail;
     using Microsoft.Graph.Models;
+    using Microsoft.Graph.Users.Item.SendMail;
 
     public sealed class GraphEmailProvider : IEmailProvider
     {
@@ -27,14 +27,6 @@ namespace PosInformatique.Foundations.Emailing.Graph
                 {
                     ContentType = BodyType.Html,
                     Content = message.HtmlContent,
-                },
-                From = new Recipient()
-                {
-                    EmailAddress = new EmailAddress
-                    {
-                        Address = message.From.Email.ToString(),
-                        Name = message.From.DisplayName,
-                    },
                 },
                 Subject = message.Subject,
                 ToRecipients = new List<Recipient>
@@ -56,7 +48,7 @@ namespace PosInformatique.Foundations.Emailing.Graph
                 SaveToSentItems = false,
             };
 
-            await this.serviceClient.Me.SendMail.PostAsync(body, cancellationToken: cancellationToken);
+            await this.serviceClient.Users[message.From.Email.ToString()].SendMail.PostAsync(body, cancellationToken: cancellationToken);
         }
     }
 }
