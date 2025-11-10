@@ -34,17 +34,19 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 
         public async Task<AppRegistrationSecretCheckResult> CheckAsync(AppRegistrationSecretCheckParameters parameters, CancellationToken cancellationToken = default)
         {
+            var now = this.timeProvider.GetUtcNow().UtcDateTime;
+
             // Gets the applications
             var applicationsByTenant = await this.GetApplicationsByTenantAsync(parameters, cancellationToken);
 
             // Check the result
-            var result = this.BuildResult(applicationsByTenant, parameters.ExpirationDateLimit);
+            var result = this.BuildResult(applicationsByTenant, now, parameters.ExpirationThreshold);
 
             // Generate the e-mail
             var emailContent = await this.emailGenerator.GenerateAsync(result, cancellationToken);
 
             // Send e-mail
-            await this.SendEmailAsync(emailContent, cancellationToken);
+            await this.SendEmailAsync(emailContent, now, cancellationToken);
 
             return result;
         }
@@ -63,7 +65,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             return tenantTasks.Select(t => t.Result).ToArray();
         }
 
-        private AppRegistrationSecretCheckResult BuildResult(IReadOnlyList<EntraIdTenant> tenants, DateTime expirationDateLimit)
+        private AppRegistrationSecretCheckResult BuildResult(IReadOnlyList<EntraIdTenant> tenants, DateTime now, TimeSpan expirationThreshold)
         {
             var tenantsResult = new List<AppRegistrationSecretCheckResultTenant>(tenants.Count);
 
@@ -73,7 +75,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
                     tenant.Id,
                     tenant.DisplayName,
                     tenant.Applications
-                        .Select(app => this.Build(app, expirationDateLimit))
+                        .Select(app => this.Build(app, now, expirationThreshold))
                         .OrderBy(app => app.DisplayName)
                         .ToArray());
 
@@ -83,34 +85,38 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             return new AppRegistrationSecretCheckResult(tenantsResult);
         }
 
-        private AppRegistrationSecretCheckResultApplication Build(EntraIdApplication application, DateTime expirationDateLimit)
+        private AppRegistrationSecretCheckResultApplication Build(EntraIdApplication application, DateTime now, TimeSpan expirationThreshold)
         {
             var secrets = application.PasswordCredentials
                 .OrderBy(pc => pc.DisplayName)
-                .Select(pc => this.Build(pc, expirationDateLimit))
+                .Select(pc => this.Build(pc, now, expirationThreshold))
                 .ToArray();
 
             return new AppRegistrationSecretCheckResultApplication(application.Id, application.DisplayName, secrets);
         }
 
-        private AppRegistrationSecretCheckResultApplicationSecret Build(EntraIdApplicationPasswordCredential passwordCredential, DateTime expirationDateLimit)
+        private AppRegistrationSecretCheckResultApplicationSecret Build(EntraIdApplicationPasswordCredential passwordCredential, DateTime now, TimeSpan expirationThreshold)
         {
             var localEndDateTime = TimeZoneInfo.ConvertTimeFromUtc(passwordCredential.EndDateTime, this.timeProvider.LocalTimeZone);
             localEndDateTime = DateTime.SpecifyKind(localEndDateTime, DateTimeKind.Local);
 
             var secret = new AppRegistrationSecretCheckResultApplicationSecret(passwordCredential.DisplayName, localEndDateTime);
 
-            if (passwordCredential.EndDateTime <= expirationDateLimit)
+            if (passwordCredential.EndDateTime < now)
             {
-                secret.Expired = true;
+                secret.Status = AppRegistrationSecretStatus.Expired;
+            }
+            else if (passwordCredential.EndDateTime <= now + expirationThreshold)
+            {
+                secret.Status = AppRegistrationSecretStatus.ExpiringSoon;
             }
 
             return secret;
         }
 
-        private async Task SendEmailAsync(string emailContent, CancellationToken cancellationToken)
+        private async Task SendEmailAsync(string emailContent, DateTime now, CancellationToken cancellationToken)
         {
-            var todayLocal = this.timeProvider.GetLocalNow();
+            var todayLocal = TimeZoneInfo.ConvertTimeFromUtc(now, this.timeProvider.LocalTimeZone);
 
             foreach (var recipient in this.options.EmailRecipients)
             {

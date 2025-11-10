@@ -18,6 +18,6 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 
         public DateTime EndDate { get; }
 
-        public bool Expired { get; set; }
+        public AppRegistrationSecretStatus Status { get; set; }
     }
 }

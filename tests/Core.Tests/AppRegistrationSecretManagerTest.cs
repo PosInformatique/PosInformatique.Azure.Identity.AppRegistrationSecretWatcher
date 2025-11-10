@@ -57,7 +57,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                                 "2-1",
                                 "App 2-1",
                                 [
-                                    new EntraIdApplicationPasswordCredential("Secret 2-1-1", now.AddDays(100)),
+                                    new EntraIdApplicationPasswordCredential("Secret 2-1-1", now.AddDays(-100)),
                                 ]),
                             new EntraIdApplication(
                                 "2-2",
@@ -73,7 +73,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 {
                     m.HtmlContent.Should().Be("The content");
                     m.From.Should().BeSameAs(sender);
-                    m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [07/02/2020]");
+                    m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [15/06/2025]");
                     m.To.DisplayName.Should().Be("Email 1");
                 })
                 .Returns(Task.CompletedTask);
@@ -82,7 +82,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 {
                     m.HtmlContent.Should().Be("The content");
                     m.From.Should().BeSameAs(sender);
-                    m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [07/02/2020]");
+                    m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [15/06/2025]");
                     m.To.DisplayName.Should().Be("Email 2");
                 })
                 .Returns(Task.CompletedTask);
@@ -101,19 +101,19 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     r.Tenants[0].Applications[0].Secrets.Should().HaveCount(2);
                     r.Tenants[0].Applications[0].Secrets[0].DisplayName.Should().Be("Secret 1-1-1");
                     r.Tenants[0].Applications[0].Secrets[0].EndDate.Should().Be(now.AddDays(60).AddHours(8)).And.BeIn(DateTimeKind.Local);
-                    r.Tenants[0].Applications[0].Secrets[0].Expired.Should().BeFalse();
+                    r.Tenants[0].Applications[0].Secrets[0].Status.Should().Be(AppRegistrationSecretStatus.Valid);
                     r.Tenants[0].Applications[0].Secrets[1].DisplayName.Should().Be("Secret 1-1-2");
                     r.Tenants[0].Applications[0].Secrets[1].EndDate.Should().Be(now.AddDays(10).AddHours(8)).And.BeIn(DateTimeKind.Local);
-                    r.Tenants[0].Applications[0].Secrets[1].Expired.Should().BeTrue();
+                    r.Tenants[0].Applications[0].Secrets[1].Status.Should().Be(AppRegistrationSecretStatus.ExpiringSoon);
                     r.Tenants[0].Applications[1].DisplayName.Should().Be("App 1-2");
                     r.Tenants[0].Applications[1].Id.Should().Be("1-2");
                     r.Tenants[0].Applications[1].Secrets.Should().HaveCount(2);
                     r.Tenants[0].Applications[1].Secrets[0].DisplayName.Should().Be("Secret 1-2-1");
                     r.Tenants[0].Applications[1].Secrets[0].EndDate.Should().Be(now.AddDays(30).AddHours(8)).And.BeIn(DateTimeKind.Local);
-                    r.Tenants[0].Applications[1].Secrets[0].Expired.Should().BeTrue();
+                    r.Tenants[0].Applications[1].Secrets[0].Status.Should().Be(AppRegistrationSecretStatus.ExpiringSoon);
                     r.Tenants[0].Applications[1].Secrets[1].DisplayName.Should().Be("Secret 1-2-2");
                     r.Tenants[0].Applications[1].Secrets[1].EndDate.Should().Be(now.AddDays(120).AddHours(8)).And.BeIn(DateTimeKind.Local);
-                    r.Tenants[0].Applications[1].Secrets[1].Expired.Should().BeFalse();
+                    r.Tenants[0].Applications[1].Secrets[1].Status.Should().Be(AppRegistrationSecretStatus.Valid);
 
                     r.Tenants[1].DisplayName.Should().Be("The tenant display name 2");
                     r.Tenants[1].Id.Should().Be("The tenant ID 2");
@@ -122,14 +122,14 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     r.Tenants[1].Applications[0].Id.Should().Be("2-1");
                     r.Tenants[1].Applications[0].Secrets.Should().HaveCount(1);
                     r.Tenants[1].Applications[0].Secrets[0].DisplayName.Should().Be("Secret 2-1-1");
-                    r.Tenants[1].Applications[0].Secrets[0].EndDate.Should().Be(now.AddDays(100).AddHours(8)).And.BeIn(DateTimeKind.Local);
-                    r.Tenants[1].Applications[0].Secrets[0].Expired.Should().BeFalse();
+                    r.Tenants[1].Applications[0].Secrets[0].EndDate.Should().Be(now.AddDays(-100).AddHours(8)).And.BeIn(DateTimeKind.Local);
+                    r.Tenants[1].Applications[0].Secrets[0].Status.Should().Be(AppRegistrationSecretStatus.Expired);
                     r.Tenants[1].Applications[1].DisplayName.Should().Be("App 2-2");
                     r.Tenants[1].Applications[1].Id.Should().Be("2-2");
                     r.Tenants[1].Applications[1].Secrets.Should().HaveCount(1);
                     r.Tenants[1].Applications[1].Secrets[0].DisplayName.Should().Be("Secret 2-2-1");
                     r.Tenants[1].Applications[1].Secrets[0].EndDate.Should().Be(now.AddDays(300).AddHours(8)).And.BeIn(DateTimeKind.Local);
-                    r.Tenants[1].Applications[1].Secrets[0].Expired.Should().BeFalse();
+                    r.Tenants[1].Applications[1].Secrets[0].Status.Should().Be(AppRegistrationSecretStatus.Valid);
 
                     expectedResult = r;
                 })
@@ -137,7 +137,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
 
             var timeProvider = new Mock<TimeProvider>(MockBehavior.Strict);
             timeProvider.Setup(tp => tp.GetUtcNow())
-                .Returns(new DateTimeOffset(2020, 2, 7, 8, 9, 15, 10, 4, TimeSpan.Zero));
+                .Returns(now);
             timeProvider.Setup(tp => tp.LocalTimeZone)
                 .Returns(TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila"));
 
@@ -151,8 +151,9 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 EmailSender = sender,
             });
 
-            var parameters = new AppRegistrationSecretCheckParameters(now.AddDays(30))
+            var parameters = new AppRegistrationSecretCheckParameters()
             {
+                ExpirationThreshold = TimeSpan.FromDays(30),
                 TenantIds =
                 {
                     "Tenant 1",

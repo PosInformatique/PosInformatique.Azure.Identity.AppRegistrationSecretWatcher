@@ -11,10 +11,20 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
         [Fact]
         public void Constructor()
         {
-            var parameters = new AppRegistrationSecretCheckParameters(new DateTime(2025, 1, 2, 3, 4, 5, 6, 7, DateTimeKind.Utc));
+            var parameters = new AppRegistrationSecretCheckParameters();
 
-            parameters.ExpirationDateLimit.Should().Be(new DateTime(2025, 1, 2, 3, 4, 5, 6, 7, DateTimeKind.Utc));
+            parameters.ExpirationThreshold.Should().Be(TimeSpan.Zero);
             parameters.TenantIds.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void ExpirationThreshold_ValueChanged()
+        {
+            var parameters = new AppRegistrationSecretCheckParameters();
+
+            parameters.ExpirationThreshold = TimeSpan.FromDays(4);
+
+            parameters.ExpirationThreshold.Should().Be(TimeSpan.FromDays(4));
         }
     }
 }

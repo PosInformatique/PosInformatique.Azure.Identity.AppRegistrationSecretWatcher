@@ -15,17 +15,17 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
 
             secret.DisplayName.Should().Be("The display name");
             secret.EndDate.Should().Be(new DateTime(2025, 1, 2, 3, 4, 5, 6)).And.BeIn(DateTimeKind.Utc);
-            secret.Expired.Should().BeFalse();
+            secret.Status.Should().Be(AppRegistrationSecretStatus.Valid);
         }
 
         [Fact]
-        public void Expired_ValueChanged()
+        public void Status_ValueChanged()
         {
             var secret = new AppRegistrationSecretCheckResultApplicationSecret(default, default);
 
-            secret.Expired = true;
+            secret.Status = AppRegistrationSecretStatus.ExpiringSoon;
 
-            secret.Expired.Should().BeTrue();
+            secret.Status.Should().Be(AppRegistrationSecretStatus.ExpiringSoon);
         }
     }
 }
