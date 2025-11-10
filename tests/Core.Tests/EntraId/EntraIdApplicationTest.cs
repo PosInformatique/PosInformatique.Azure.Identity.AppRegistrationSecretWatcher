@@ -13,8 +13,8 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
         {
             var passwordCredentials = new[]
             {
-                new EntraIdApplicationPasswordCredential(default, default),
-                new EntraIdApplicationPasswordCredential(default, default),
+                new EntraIdApplicationPasswordCredential(default, DateTime.UtcNow),
+                new EntraIdApplicationPasswordCredential(default, DateTime.UtcNow),
             };
 
             var application = new EntraIdApplication("The id", "The display name", passwordCredentials);

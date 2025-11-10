@@ -11,10 +11,10 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
         [Fact]
         public void Constructor()
         {
-            var credential = new EntraIdApplicationPasswordCredential("The display name", new DateTimeOffset(2021, 1, 2, 3, 4, 5, 6, TimeSpan.FromHours(1)));
+            var credential = new EntraIdApplicationPasswordCredential("The display name", new DateTime(2021, 1, 2, 3, 4, 5, 6, DateTimeKind.Utc));
 
             credential.DisplayName.Should().Be("The display name");
-            credential.EndDateTime.Should().Be(new DateTimeOffset(2021, 1, 2, 3, 4, 5, 6, TimeSpan.FromHours(1)));
+            credential.EndDateTime.Should().Be(new DateTime(2021, 1, 2, 3, 4, 5, 6)).And.BeIn(DateTimeKind.Utc);
         }
     }
 }

@@ -46,12 +46,12 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
                                 new PasswordCredential()
                                 {
                                     DisplayName = "Password 1",
-                                    EndDateTime = new DateTimeOffset(2025, 1, 2, 3, 4, 5, 6, 7, TimeSpan.FromHours(1)),
+                                    EndDateTime = new DateTimeOffset(2025, 1, 1, 2, 1, 1, 1, 1, TimeSpan.FromHours(1)),
                                 },
                                 new PasswordCredential()
                                 {
                                     DisplayName = "Password 2",
-                                    EndDateTime = new DateTimeOffset(2025, 1, 2, 3, 4, 5, 6, 7, TimeSpan.FromHours(2)),
+                                    EndDateTime = new DateTimeOffset(2025, 2, 2, 4, 2, 2, 2, 2, TimeSpan.FromHours(2)),
                                 },
                             },
                         },
@@ -82,9 +82,9 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId.Te
             result[0].Id.Should().Be("App Id 1");
             result[0].PasswordCredentials.Should().HaveCount(2);
             result[0].PasswordCredentials[0].DisplayName.Should().Be("Password 1");
-            result[0].PasswordCredentials[0].EndDateTime.Should().Be(new DateTimeOffset(2025, 1, 2, 3, 4, 5, 6, 7, TimeSpan.FromHours(1)));
+            result[0].PasswordCredentials[0].EndDateTime.Should().Be(new DateTime(2025, 1, 1, 1, 1, 1, 1, 1)).And.BeIn(DateTimeKind.Utc);
             result[0].PasswordCredentials[1].DisplayName.Should().Be("Password 2");
-            result[0].PasswordCredentials[1].EndDateTime.Should().Be(new DateTimeOffset(2025, 1, 2, 3, 4, 5, 6, 7, TimeSpan.FromHours(2)));
+            result[0].PasswordCredentials[1].EndDateTime.Should().Be(new DateTime(2025, 2, 2, 2, 2, 2, 2, 2)).And.BeIn(DateTimeKind.Utc);
 
             result[1].DisplayName.Should().Be("Display name 2");
             result[1].Id.Should().Be("App Id 2");

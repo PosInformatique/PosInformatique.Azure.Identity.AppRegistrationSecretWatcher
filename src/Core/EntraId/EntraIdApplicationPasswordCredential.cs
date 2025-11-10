@@ -8,14 +8,16 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId
 {
     public class EntraIdApplicationPasswordCredential
     {
-        public EntraIdApplicationPasswordCredential(string displayName, DateTimeOffset endDateTime)
+        public EntraIdApplicationPasswordCredential(string displayName, DateTime endDateTime)
         {
+            Guard.IsUtc(endDateTime, nameof(endDateTime));
+
             this.DisplayName = displayName;
             this.EndDateTime = endDateTime;
         }
 
         public string DisplayName { get; }
 
-        public DateTimeOffset EndDateTime { get; }
+        public DateTime EndDateTime { get; }
     }
 }

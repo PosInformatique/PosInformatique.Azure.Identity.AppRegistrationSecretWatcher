@@ -32,7 +32,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId
             }
 
             return applications.Value
-                .Select(app => new EntraIdApplication(app.AppId!, app.DisplayName!, app.PasswordCredentials!.Select(pc => new EntraIdApplicationPasswordCredential(pc.DisplayName!, pc.EndDateTime!.Value)).ToArray()))
+                .Select(app => new EntraIdApplication(app.AppId!, app.DisplayName!, app.PasswordCredentials!.Select(pc => new EntraIdApplicationPasswordCredential(pc.DisplayName!, pc.EndDateTime!.Value.UtcDateTime)).ToArray()))
                 .ToArray();
         }
     }

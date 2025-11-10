@@ -6,8 +6,6 @@
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId
 {
-    using System.Collections.ObjectModel;
-
     public class EntraIdApplication
     {
         public EntraIdApplication(string id, string displayName, IReadOnlyList<EntraIdApplicationPasswordCredential> passwordCredentials)

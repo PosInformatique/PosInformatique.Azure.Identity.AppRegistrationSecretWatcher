@@ -7,4 +7,7 @@ dotnet_diagnostic.CA2016.severity = none
 
 #### Sonar Analyzers ####
 
+# S6562: Always set the "DateTimeKind" when creating new "DateTime" instances
+dotnet_diagnostic.S6562.severity = none
+
 #### StyleCop ####
