@@ -100,7 +100,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             var localEndDateTime = TimeZoneInfo.ConvertTimeFromUtc(passwordCredential.EndDateTime, this.timeProvider.LocalTimeZone);
             localEndDateTime = DateTime.SpecifyKind(localEndDateTime, DateTimeKind.Local);
 
-            var secret = new AppRegistrationSecretCheckResultApplicationSecret(passwordCredential.DisplayName, localEndDateTime);
+            var secret = new AppRegistrationSecretCheckResultApplicationSecret(passwordCredential.DisplayName, localEndDateTime, (passwordCredential.EndDateTime - now).Days);
 
             if (passwordCredential.EndDateTime < now)
             {
