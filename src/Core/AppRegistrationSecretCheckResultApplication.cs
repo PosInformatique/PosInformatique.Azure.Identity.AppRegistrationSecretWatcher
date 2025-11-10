@@ -8,11 +8,14 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 {
     public class AppRegistrationSecretCheckResultApplication
     {
-        public AppRegistrationSecretCheckResultApplication(string displayName, IReadOnlyList<AppRegistrationSecretCheckResultApplicationSecret> secrets)
+        public AppRegistrationSecretCheckResultApplication(string id, string displayName, IReadOnlyList<AppRegistrationSecretCheckResultApplicationSecret> secrets)
         {
+            this.Id = id;
             this.DisplayName = displayName;
             this.Secrets = new ReadOnlyCollection<AppRegistrationSecretCheckResultApplicationSecret>(secrets.ToArray());
         }
+
+        public string Id { get; }
 
         public string DisplayName { get; }
 

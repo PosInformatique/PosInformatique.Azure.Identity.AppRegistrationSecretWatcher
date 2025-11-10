@@ -17,9 +17,10 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
                 new AppRegistrationSecretCheckResultApplicationSecret(default, default),
             };
 
-            var application = new AppRegistrationSecretCheckResultApplication("The display name", secrets);
+            var application = new AppRegistrationSecretCheckResultApplication("The ID", "The display name", secrets);
 
             application.DisplayName.Should().Be("The display name");
+            application.Id.Should().Be("The ID");
             application.Secrets.Should().Equal(secrets);
         }
     }

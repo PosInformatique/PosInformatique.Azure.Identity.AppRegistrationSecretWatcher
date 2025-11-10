@@ -13,8 +13,8 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
         {
             var applications = new[]
             {
-                new AppRegistrationSecretCheckResultApplication(default, []),
-                new AppRegistrationSecretCheckResultApplication(default, []),
+                new AppRegistrationSecretCheckResultApplication(default, default, []),
+                new AppRegistrationSecretCheckResultApplication(default, default, []),
             };
 
             var tenant = new AppRegistrationSecretCheckResultTenant("The ID", "The display name", applications);

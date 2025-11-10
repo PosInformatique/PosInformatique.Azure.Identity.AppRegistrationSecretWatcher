@@ -6,7 +6,6 @@
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
 {
-    using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
     using PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing;
     using PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId;
@@ -89,8 +88,8 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 .Returns(Task.CompletedTask);
 
             var emailGenerator = new Mock<IEmailGenerator>(MockBehavior.Strict);
-            emailGenerator.Setup(g => g.Generate(It.IsAny<AppRegistrationSecretCheckResult>()))
-                .Callback((AppRegistrationSecretCheckResult r) =>
+            emailGenerator.Setup(g => g.GenerateAsync(It.IsAny<AppRegistrationSecretCheckResult>(), cancellationToken))
+                .Callback((AppRegistrationSecretCheckResult r, CancellationToken _) =>
                 {
                     r.Tenants.Should().HaveCount(2);
 
@@ -98,6 +97,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     r.Tenants[0].Id.Should().Be("The tenant ID 1");
                     r.Tenants[0].Applications.Should().HaveCount(2);
                     r.Tenants[0].Applications[0].DisplayName.Should().Be("App 1-1");
+                    r.Tenants[0].Applications[0].Id.Should().Be("1-1");
                     r.Tenants[0].Applications[0].Secrets.Should().HaveCount(2);
                     r.Tenants[0].Applications[0].Secrets[0].DisplayName.Should().Be("Secret 1-1-1");
                     r.Tenants[0].Applications[0].Secrets[0].EndDate.Should().Be(now.AddDays(60).AddHours(8)).And.BeIn(DateTimeKind.Local);
@@ -106,6 +106,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     r.Tenants[0].Applications[0].Secrets[1].EndDate.Should().Be(now.AddDays(10).AddHours(8)).And.BeIn(DateTimeKind.Local);
                     r.Tenants[0].Applications[0].Secrets[1].Expired.Should().BeTrue();
                     r.Tenants[0].Applications[1].DisplayName.Should().Be("App 1-2");
+                    r.Tenants[0].Applications[1].Id.Should().Be("1-2");
                     r.Tenants[0].Applications[1].Secrets.Should().HaveCount(2);
                     r.Tenants[0].Applications[1].Secrets[0].DisplayName.Should().Be("Secret 1-2-1");
                     r.Tenants[0].Applications[1].Secrets[0].EndDate.Should().Be(now.AddDays(30).AddHours(8)).And.BeIn(DateTimeKind.Local);
@@ -118,11 +119,13 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     r.Tenants[1].Id.Should().Be("The tenant ID 2");
                     r.Tenants[1].Applications.Should().HaveCount(2);
                     r.Tenants[1].Applications[0].DisplayName.Should().Be("App 2-1");
+                    r.Tenants[1].Applications[0].Id.Should().Be("2-1");
                     r.Tenants[1].Applications[0].Secrets.Should().HaveCount(1);
                     r.Tenants[1].Applications[0].Secrets[0].DisplayName.Should().Be("Secret 2-1-1");
                     r.Tenants[1].Applications[0].Secrets[0].EndDate.Should().Be(now.AddDays(100).AddHours(8)).And.BeIn(DateTimeKind.Local);
                     r.Tenants[1].Applications[0].Secrets[0].Expired.Should().BeFalse();
                     r.Tenants[1].Applications[1].DisplayName.Should().Be("App 2-2");
+                    r.Tenants[1].Applications[1].Id.Should().Be("2-2");
                     r.Tenants[1].Applications[1].Secrets.Should().HaveCount(1);
                     r.Tenants[1].Applications[1].Secrets[0].DisplayName.Should().Be("Secret 2-2-1");
                     r.Tenants[1].Applications[1].Secrets[0].EndDate.Should().Be(now.AddDays(300).AddHours(8)).And.BeIn(DateTimeKind.Local);
@@ -130,7 +133,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
 
                     expectedResult = r;
                 })
-                .Returns("The content");
+                .ReturnsAsync("The content");
 
             var timeProvider = new Mock<TimeProvider>(MockBehavior.Strict);
             timeProvider.Setup(tp => tp.GetUtcNow())

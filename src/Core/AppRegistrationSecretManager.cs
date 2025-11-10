@@ -41,7 +41,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             var result = this.BuildResult(applicationsByTenant, parameters.ExpirationDateLimit);
 
             // Generate the e-mail
-            var emailContent = this.emailGenerator.Generate(result);
+            var emailContent = await this.emailGenerator.GenerateAsync(result, cancellationToken);
 
             // Send e-mail
             await this.SendEmailAsync(emailContent, cancellationToken);
@@ -90,7 +90,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
                 .Select(pc => this.Build(pc, expirationDateLimit))
                 .ToArray();
 
-            return new AppRegistrationSecretCheckResultApplication(application.DisplayName, secrets);
+            return new AppRegistrationSecretCheckResultApplication(application.Id, application.DisplayName, secrets);
         }
 
         private AppRegistrationSecretCheckResultApplicationSecret Build(EntraIdApplicationPasswordCredential passwordCredential, DateTime expirationDateLimit)
