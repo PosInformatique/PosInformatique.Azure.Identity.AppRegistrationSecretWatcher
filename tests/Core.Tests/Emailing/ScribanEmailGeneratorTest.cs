@@ -30,7 +30,11 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.T
                             [
                                 new AppRegistrationSecretCheckResultApplicationSecret("Secret 1-2-1", new DateTime(2025, 3, 3), 30) { Status = AppRegistrationSecretStatus.Valid },
                                 new AppRegistrationSecretCheckResultApplicationSecret("Secret 1-2-2", new DateTime(2025, 4, 4), 40) { Status = AppRegistrationSecretStatus.ExpiringSoon },
-                            ])
+                            ]),
+                        new AppRegistrationSecretCheckResultApplication(
+                            "Id 1-3",
+                            "The app 1-3",
+                            [])
                     ]),
                 new AppRegistrationSecretCheckResultTenant(
                     "Id 2",
@@ -49,6 +53,10 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.T
                                 new AppRegistrationSecretCheckResultApplicationSecret("Secret 2-1-1", new DateTime(2025, 6, 6), 60) { Status = AppRegistrationSecretStatus.Valid },
                             ])
                     ]),
+                new AppRegistrationSecretCheckResultTenant(
+                    "Id 3",
+                    "The tenant 3",
+                    []),
             ]);
 
             var generator = new ScribanEmailGenerator();

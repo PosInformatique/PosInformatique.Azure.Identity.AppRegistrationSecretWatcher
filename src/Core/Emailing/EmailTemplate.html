@@ -73,23 +73,31 @@
         <div class="tenant">
             <h2>{{ tenant.DisplayName }} ({{ tenant.Id }})</h2>
 
-            {{ for application in tenant.Applications }}
-                <div class="application">
-                    <h3>{{ application.DisplayName }} ({{ application.Id }})</h3>
+            {{ if tenant.Applications.size == 0 }}
+                <div class="secret">No application</div>
+            {{ else }}
+                {{ for application in tenant.Applications }}
+                    <div class="application">
+                        <h3>{{ application.DisplayName }} ({{ application.Id }})</h3>
 
-                    {{ for secret in application.Secrets }}
-                        <div class="secret {{ status_to_css secret.Status }}">
-                            <div>Display name: {{ secret.DisplayName }}</div>
-                            <div>Status: <span class="status">{{ secret.Status }}</span></div>
-                            <div>Expiration date: {{ secret.EndDate | date.to_string '%e-%b-%Y' }}</div>
-                            {{ if secret.DaysBeforeExpiration > 0 }}
-                                <div>Days before expiration: {{ secret.DaysBeforeExpiration }} days</div>
-                            {{ else }}
-                                <div>Expired since: {{ -secret.DaysBeforeExpiration }} days</div>
+                        {{ if application.Secrets.size == 0 }}
+                            <div class="secret">No secret</div>
+                        {{ else }}
+                            {{ for secret in application.Secrets }}
+                                <div class="secret {{ status_to_css secret.Status }}">
+                                    <div>Display name: {{ secret.DisplayName }}</div>
+                                    <div>Status: <span class="status">{{ secret.Status }}</span></div>
+                                    <div>Expiration date: {{ secret.EndDate | date.to_string '%e-%b-%Y' }}</div>
+                                    {{ if secret.DaysBeforeExpiration > 0 }}
+                                        <div>Days before expiration: {{ secret.DaysBeforeExpiration }} days</div>
+                                    {{ else }}
+                                        <div>Expired since: {{ -secret.DaysBeforeExpiration }} days</div>
+                                    {{ end }}
+                                </div>
                             {{ end }}
-                        </div>
-                    {{ end }}
-                </div>
+                        {{ end }}
+                    </div>
+                {{ end }}
             {{ end }}
         </div>
     {{ end }}

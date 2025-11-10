@@ -63,53 +63,67 @@
                 <h2>The tenant 1 (Id 1)</h2>
     
                 
-                            <div class="application">
-                                <h3>The app 1-1 (Id 1-1)</h3>
-            
+                            
+                                    <div class="application">
+                                        <h3>The app 1-1 (Id 1-1)</h3>
+                
+                                        
+                                                    
+                                                            <div class="secret expired">
+                                                                <div>Display name: Secret 1-1-1</div>
+                                                                <div>Status: <span class="status">Expired</span></div>
+                                                                <div>Expiration date:  1-Jan-2025</div>
+                                                                
+                                                                            <div>Expired since: 10 days</div>
+                                                                        
+                                                            </div>
+                                                        
+                                                            <div class="secret valid">
+                                                                <div>Display name: Secret 1-1-2</div>
+                                                                <div>Status: <span class="status">Valid</span></div>
+                                                                <div>Expiration date:  2-Feb-2025</div>
+                                                                
+                                                                            <div>Days before expiration: 20 days</div>
+                                                                        
+                                                            </div>
+                                                        
+                                                
+                                    </div>
                                 
-                                            <div class="secret expired">
-                                                <div>Display name: Secret 1-1-1</div>
-                                                <div>Status: <span class="status">Expired</span></div>
-                                                <div>Expiration date:  1-Jan-2025</div>
-                                                
-                                                            <div>Expired since: 10 days</div>
-                                                        
-                                            </div>
+                                    <div class="application">
+                                        <h3>The app 1-2 (Id 1-2)</h3>
+                
                                         
-                                            <div class="secret valid">
-                                                <div>Display name: Secret 1-1-2</div>
-                                                <div>Status: <span class="status">Valid</span></div>
-                                                <div>Expiration date:  2-Feb-2025</div>
-                                                
-                                                            <div>Days before expiration: 20 days</div>
+                                                    
+                                                            <div class="secret valid">
+                                                                <div>Display name: Secret 1-2-1</div>
+                                                                <div>Status: <span class="status">Valid</span></div>
+                                                                <div>Expiration date:  3-Mar-2025</div>
+                                                                
+                                                                            <div>Days before expiration: 30 days</div>
+                                                                        
+                                                            </div>
                                                         
-                                            </div>
-                                        
-                            </div>
-                        
-                            <div class="application">
-                                <h3>The app 1-2 (Id 1-2)</h3>
-            
+                                                            <div class="secret expiring-soon">
+                                                                <div>Display name: Secret 1-2-2</div>
+                                                                <div>Status: <span class="status">ExpiringSoon</span></div>
+                                                                <div>Expiration date:  4-Apr-2025</div>
+                                                                
+                                                                            <div>Days before expiration: 40 days</div>
+                                                                        
+                                                            </div>
+                                                        
+                                                
+                                    </div>
                                 
-                                            <div class="secret valid">
-                                                <div>Display name: Secret 1-2-1</div>
-                                                <div>Status: <span class="status">Valid</span></div>
-                                                <div>Expiration date:  3-Mar-2025</div>
-                                                
-                                                            <div>Days before expiration: 30 days</div>
-                                                        
-                                            </div>
+                                    <div class="application">
+                                        <h3>The app 1-3 (Id 1-3)</h3>
+                
                                         
-                                            <div class="secret expiring-soon">
-                                                <div>Display name: Secret 1-2-2</div>
-                                                <div>Status: <span class="status">ExpiringSoon</span></div>
-                                                <div>Expiration date:  4-Apr-2025</div>
+                                                    <div class="secret">No secret</div>
                                                 
-                                                            <div>Days before expiration: 40 days</div>
-                                                        
-                                            </div>
-                                        
-                            </div>
+                                    </div>
+                                
                         
             </div>
         
@@ -117,35 +131,49 @@
                 <h2>The tenant 2 (Id 2)</h2>
     
                 
-                            <div class="application">
-                                <h3>The app 2-1 (Id 2-1)</h3>
-            
-                                
-                                            <div class="secret valid">
-                                                <div>Display name: Secret 2-1-1</div>
-                                                <div>Status: <span class="status">Valid</span></div>
-                                                <div>Expiration date:  5-May-2025</div>
-                                                
-                                                            <div>Days before expiration: 50 days</div>
-                                                        
-                                            </div>
+                            
+                                    <div class="application">
+                                        <h3>The app 2-1 (Id 2-1)</h3>
+                
                                         
-                            </div>
+                                                    
+                                                            <div class="secret valid">
+                                                                <div>Display name: Secret 2-1-1</div>
+                                                                <div>Status: <span class="status">Valid</span></div>
+                                                                <div>Expiration date:  5-May-2025</div>
+                                                                
+                                                                            <div>Days before expiration: 50 days</div>
+                                                                        
+                                                            </div>
+                                                        
+                                                
+                                    </div>
+                                
+                                    <div class="application">
+                                        <h3>The app 2-2 (Id 2-2)</h3>
+                
+                                        
+                                                    
+                                                            <div class="secret valid">
+                                                                <div>Display name: Secret 2-1-1</div>
+                                                                <div>Status: <span class="status">Valid</span></div>
+                                                                <div>Expiration date:  6-Jun-2025</div>
+                                                                
+                                                                            <div>Days before expiration: 60 days</div>
+                                                                        
+                                                            </div>
+                                                        
+                                                
+                                    </div>
+                                
                         
-                            <div class="application">
-                                <h3>The app 2-2 (Id 2-2)</h3>
-            
-                                
-                                            <div class="secret valid">
-                                                <div>Display name: Secret 2-1-1</div>
-                                                <div>Status: <span class="status">Valid</span></div>
-                                                <div>Expiration date:  6-Jun-2025</div>
-                                                
-                                                            <div>Days before expiration: 60 days</div>
-                                                        
-                                            </div>
-                                        
-                            </div>
+            </div>
+        
+            <div class="tenant">
+                <h2>The tenant 3 (Id 3)</h2>
+    
+                
+                            <div class="secret">No application</div>
                         
             </div>
         
