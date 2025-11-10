@@ -72,7 +72,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     m.HtmlContent.Should().Be("The content");
                     m.From.DisplayName.Should().BeEmpty();
                     m.From.Email.Should().Be(EmailAddress.Parse("sender@domain.com"));
-                    m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [15/06/2025]");
+                    m.Subject.Should().Be($"Reminder: App Registration secrets expiring soon - [{new DateTime(2025, 6, 15):d}]");
                     m.To.DisplayName.Should().BeEmpty();
                 })
                 .Returns(Task.CompletedTask);
@@ -82,7 +82,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                     m.HtmlContent.Should().Be("The content");
                     m.From.DisplayName.Should().BeEmpty();
                     m.From.Email.Should().Be(EmailAddress.Parse("sender@domain.com"));
-                    m.Subject.Should().Be("Reminder: App Registration secrets expiring soon - [15/06/2025]");
+                    m.Subject.Should().Be($"Reminder: App Registration secrets expiring soon - [{new DateTime(2025, 6, 15):d}]");
                     m.To.DisplayName.Should().BeEmpty();
                 })
                 .Returns(Task.CompletedTask);
