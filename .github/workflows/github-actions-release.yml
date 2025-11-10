@@ -25,9 +25,22 @@ jobs:
         with:
           dotnet-version: '9.x'
       
-      - name: Build AppRegistrationSecretWatcher functions
-        run: dotnet build 
+      - name: Build AppRegistrationSecretWatcher Azure Functions
+        run: dotnet publish 
           --property:Configuration=Release
           --property:VersionPrefix=${{ github.event.inputs.VersionPrefix }}
           --property:VersionSuffix=${{ github.event.inputs.VersionSuffix }}
+          --output ./publish
           "src/Functions/Functions.csproj"
+
+      - name: Package the AppRegistrationSecretWatcher Azure Functions
+        run: cd ./publish && zip -r ../PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.zip .
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.event.inputs.VersionPrefix }}${{ github.event.inputs.VersionSuffix && format('-{0}', github.event.inputs.VersionSuffix) || '' }}
+          files: functionapp.zip
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
