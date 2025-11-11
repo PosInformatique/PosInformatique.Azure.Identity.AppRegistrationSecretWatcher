@@ -37,7 +37,7 @@ jobs:
         run: cd ./publish && zip -r ../PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.zip .
 
       - name: Upload to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.event.inputs.VersionPrefix }}${{ github.event.inputs.VersionSuffix && format('-{0}', github.event.inputs.VersionSuffix) || '' }}
           files: ../PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.zip
