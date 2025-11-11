@@ -40,7 +40,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.event.inputs.VersionPrefix }}${{ github.event.inputs.VersionSuffix && format('-{0}', github.event.inputs.VersionSuffix) || '' }}
-          files: functionapp.zip
-          overwrite: true
+          files: ../PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.zip
+          overwrite_files: true
+          draft: ${{ !github.event.inputs.VersionSuffix }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
