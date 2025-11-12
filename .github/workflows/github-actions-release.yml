@@ -34,13 +34,13 @@ jobs:
           "src/Functions/Functions.csproj"
 
       - name: Package the AppRegistrationSecretWatcher Azure Functions
-        run: cd ./publish && zip -r ../PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.zip .
+        run: cd ./publish && zip -r ../PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions.net9.0.zip .
 
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.event.inputs.VersionPrefix }}${{ github.event.inputs.VersionSuffix && format('-{0}', github.event.inputs.VersionSuffix) || '' }}
-          files: ./PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.zip
+          files: ./PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions.net9.0.zip
           overwrite_files: true
           draft: ${{ !github.event.inputs.VersionSuffix }}
         env:
