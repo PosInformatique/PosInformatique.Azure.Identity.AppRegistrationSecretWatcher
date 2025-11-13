@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.Graph" />
+    <PackageReference Include="PosInformatique.Foundations.EmailAddresses" />
+    <PackageReference Include="Scriban" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Emailing\EmailTemplate.html" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Emailing\EmailTemplate.html">
+      <LogicalName>PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.EmailTemplate.html</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+</Project>

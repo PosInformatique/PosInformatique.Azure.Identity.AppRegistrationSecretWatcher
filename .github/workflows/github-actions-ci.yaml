@@ -1,0 +1,39 @@
+﻿name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "releases/**" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Restore dependencies
+        run: dotnet restore PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.slnx
+
+      - name: Build solution
+        run: dotnet build PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.slnx --configuration Release --no-restore
+
+      - name: Run tests
+        run: |
+          dotnet test PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.slnx \
+          --configuration Release \
+          --no-build \
+          --logger "trx;LogFileName=test_results.trx" \
+          --results-directory ./TestResults
+  
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: (!cancelled())
+        with:
+          files: |
+            TestResults/**/*.trx
