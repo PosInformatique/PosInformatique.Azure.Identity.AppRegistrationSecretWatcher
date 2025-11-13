@@ -9,31 +9,75 @@
         }
 
         .tenant {
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 15px;
+            padding: 15px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .tenant h2 {
-            margin-bottom: 10px;
+            margin-top: 0px;
+            margin-bottom: 4px;
+        }
+
+        .tenant-metadata {
+            margin-bottom: 2px;
+            margin-left: 8px;
+            font-size: 0.75em;
+            line-height: 1.4;
+        }
+
+        .tenant-content {
+            background-color: #f9f9fc;
+            padding: 8px;
+            border-radius: 6px;
         }
 
         .application {
-            margin-left: 10px;
-            margin-bottom: 20px;
+            background-color: #f2f2f2;
+            margin-left: 2px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            padding: 6px
         }
 
         .application h3 {
-            margin-bottom: 8px;
+            margin-top: 2px;
+            margin-bottom: 6px;
+        }
+
+        .application-content {
+            padding: 2px;
+            border-radius: 6px;
+        }
+
+        .application-metadata {
+            margin-bottom: 15px;
+            margin-left: 8px;
+            font-size: 0.75em;
+            line-height: 1.4;
         }
 
         .secret {
-            margin-left: 20px;
             padding: 8px;
             border-radius: 6px;
             margin-bottom: 6px;
+        }
+
+        .secret h4 {
+            margin-top: 2px;
+            margin-bottom: 10px;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .secret-content {
+            margin-left: 2px;
+        }
+
+        .label {
+            font-weight: bold;
         }
 
         .expired {
@@ -50,6 +94,24 @@
 
         .status {
             font-weight: bold;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 8px 16px;
+            align-items: center;
+            margin: 0.5em 0;
+            font-size: 0.85em;
+        }
+
+        .info-label {
+            color: #555;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: #333;
         }
     </style>
 </head>
@@ -71,34 +133,54 @@
 
     {{ for tenant in Tenants }}
         <div class="tenant">
-            <h2>{{ tenant.DisplayName }} ({{ tenant.Id }})</h2>
-
-            {{ if tenant.Applications.size == 0 }}
-                <div class="secret">No application</div>
-            {{ else }}
-                {{ for application in tenant.Applications }}
-                    <div class="application">
-                        <h3>{{ application.DisplayName }} ({{ application.Id }})</h3>
-
-                        {{ if application.Secrets.size == 0 }}
-                            <div class="secret">No secret</div>
-                        {{ else }}
-                            {{ for secret in application.Secrets }}
-                                <div class="secret {{ status_to_css secret.Status }}">
-                                    <div>Display name: {{ secret.DisplayName }}</div>
-                                    <div>Status: <span class="status">{{ secret.Status }}</span></div>
-                                    <div>Expiration date: {{ secret.EndDate | date.to_string '%e-%b-%Y' }}</div>
-                                    {{ if secret.DaysBeforeExpiration > 0 }}
-                                        <div>Days before expiration: {{ secret.DaysBeforeExpiration }} days</div>
-                                    {{ else }}
-                                        <div>Expired since: {{ -secret.DaysBeforeExpiration }} days</div>
+            <h2>{{ tenant.DisplayName }}</h2>
+            <div class="tenant-metadata">
+                <div><span class="label">ID:</span> {{ tenant.Id }}</div>
+            </div>
+            <div class="tenant-content">
+                {{ if tenant.Applications.size == 0 }}
+                    <div class="secret">No application</div>
+                {{ else }}
+                    {{ for application in tenant.Applications }}
+                        <div class="application">
+                            <h3>{{ application.DisplayName }}</h3>
+                            <div class="application-metadata">
+                                <div><span class="label">ID:</span> {{ application.Id }}</div>
+                            </div>
+                            <div class="application-content">
+                                {{ if application.Secrets.size == 0 }}
+                                    <div class="secret">No secret</div>
+                                {{ else }}
+                                    {{ for secret in application.Secrets }}
+                                        <div class="secret {{ status_to_css secret.Status }}">
+                                            <h4>{{ secret.DisplayName }}</h4>
+                                            <div class="secret-content">
+                                                <div class="info-row">
+                                                    <div class="info-label">Status:</div>
+                                                    <div class="info-value"><span class="status">{{ secret.Status }}</span></div>
+                                                </div>
+                                                <div class="info-row">
+                                                    <div class="info-label">Expiration date:</div>
+                                                    <div class="info-value">{{ secret.EndDate | date.to_string '%e-%b-%Y' }}</div>
+                                                </div>
+                                                <div class="info-row">
+                                                    {{ if secret.DaysBeforeExpiration > 0 }}
+                                                    <div class="info-label">Days before expiration:</div>
+                                                    <div class="info-value">{{ secret.DaysBeforeExpiration }} days</div>
+                                                    {{ else }}
+                                                    <div class="info-label">Expired since:</div>
+                                                    <div class="info-value">{{ -secret.DaysBeforeExpiration }} days</div>
+                                                    {{ end }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     {{ end }}
-                                </div>
-                            {{ end }}
-                        {{ end }}
-                    </div>
+                                {{ end }}
+                            </div>
+                        </div>
+                    {{ end }}
                 {{ end }}
-            {{ end }}
+            </div>
         </div>
     {{ end }}
 </body>
