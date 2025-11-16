@@ -17,8 +17,11 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Core.Tests
                 new AppRegistrationSecretCheckResultTenant(default, default, []),
             };
 
-            var tenant = new AppRegistrationSecretCheckResult(tenants);
+            var dateTime = new DateTime(2024, 1, 2, 3, 4, 5, 6, 7, DateTimeKind.Utc);
 
+            var tenant = new AppRegistrationSecretCheckResult(tenants, dateTime);
+
+            tenant.DateTime.Should().Be(dateTime);
             tenant.Tenants.Should().Equal(tenants);
         }
     }

@@ -15,19 +15,16 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
     {
         private readonly IEntraIdClient entraIdApplicationClient;
 
-        private readonly IEmailProvider emailProvider;
-
-        private readonly IEmailGenerator emailGenerator;
+        private readonly IEmailManager emailManager;
 
         private readonly AppRegistrationSecretManagerOptions options;
 
         private readonly TimeProvider timeProvider;
 
-        public AppRegistrationSecretManager(IEntraIdClient entraIdApplicationClient, IEmailProvider emailProvider, IEmailGenerator emailGenerator, TimeProvider timeProvider, IOptions<AppRegistrationSecretManagerOptions> options)
+        public AppRegistrationSecretManager(IEntraIdClient entraIdApplicationClient, IEmailManager emailManager, TimeProvider timeProvider, IOptions<AppRegistrationSecretManagerOptions> options)
         {
             this.entraIdApplicationClient = entraIdApplicationClient;
-            this.emailProvider = emailProvider;
-            this.emailGenerator = emailGenerator;
+            this.emailManager = emailManager;
             this.timeProvider = timeProvider;
             this.options = options.Value;
         }
@@ -42,11 +39,8 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             // Check the result
             var result = this.BuildResult(applicationsByTenant, now, parameters.ExpirationThreshold);
 
-            // Generate the e-mail
-            var emailContent = await this.emailGenerator.GenerateAsync(result, cancellationToken);
-
             // Send e-mail
-            await this.SendEmailAsync(emailContent, now, cancellationToken);
+            await this.SendEmailAsync(result, cancellationToken);
 
             return result;
         }
@@ -82,7 +76,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
                 tenantsResult.Add(tenantResult);
             }
 
-            return new AppRegistrationSecretCheckResult(tenantsResult);
+            return new AppRegistrationSecretCheckResult(tenantsResult, now);
         }
 
         private AppRegistrationSecretCheckResultApplication Build(EntraIdApplication application, DateTime now, TimeSpan expirationThreshold)
@@ -114,20 +108,16 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             return secret;
         }
 
-        private async Task SendEmailAsync(string emailContent, DateTime now, CancellationToken cancellationToken)
+        private async Task SendEmailAsync(AppRegistrationSecretCheckResult result, CancellationToken cancellationToken)
         {
-            var todayLocal = TimeZoneInfo.ConvertTimeFromUtc(now, this.timeProvider.LocalTimeZone);
+            var email = this.emailManager.Create(EmailTemplates.ReportIdentifier);
 
             foreach (var recipient in this.options.EmailRecipients)
             {
-                var message = new EmailMessage(
-                    new EmailContact(this.options.EmailSender, string.Empty),
-                    new EmailContact(recipient, string.Empty),
-                    $"Reminder: App Registration secrets expiring soon - [{todayLocal:d}]",
-                    emailContent);
-
-                await this.emailProvider.SendAsync(message, cancellationToken);
+                email.Recipients.Add(recipient, string.Empty, result);
             }
+
+            await this.emailManager.SendAsync(email, cancellationToken);
         }
     }
 }

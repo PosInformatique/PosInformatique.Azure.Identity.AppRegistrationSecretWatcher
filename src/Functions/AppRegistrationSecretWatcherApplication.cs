@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="AppRegistrationSecretWatcherApplication.cs" company="P.O.S Informatique">
 //     Copyright (c) P.O.S Informatique. All rights reserved.
 // </copyright>
@@ -12,12 +12,9 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions
     using Microsoft.Azure.Functions.Worker.Builder;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Graph;
     using PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing;
     using PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId;
     using PosInformatique.Foundations.EmailAddresses;
-    using PosInformatique.Foundations.Emailing;
-    using PosInformatique.Foundations.Emailing.Graph;
 
     public static class AppRegistrationSecretWatcherApplication
     {
@@ -96,16 +93,18 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions
                 .ConfigureFunctionsApplicationInsights();
 
             // Emailing
-            builder.Services.AddSingleton<IEmailGenerator, ScribanEmailGenerator>();
-            builder.Services.AddSingleton<IEmailProvider, GraphEmailProvider>();
+            builder.Services.AddEmailing(opt =>
+            {
+                opt.SenderEmailAddress = emailSender;
+
+                opt.RegisterTemplate(EmailTemplates.ReportIdentifier, EmailTemplates.Report);
+            })
+            .UseGraph(new DefaultAzureCredential())
+            .UseRazorEmailTemplates();
 
             // Graph API
             builder.Services.AddSingleton<IEntraIdClient, GraphEntraIdClient>();
             builder.Services.AddSingleton<IGraphServiceClientFactory, GraphServiceClientFactory>();
-            builder.Services.AddSingleton(sp =>
-            {
-                return new GraphServiceClient(new DefaultAzureCredential());
-            });
 
             builder.Services.Configure<GraphEntraIdClientOptions>(opt =>
             {
@@ -114,12 +113,10 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions
             });
 
             // App registrations secret manager
-            builder.Services.AddSingleton<IAppRegistrationSecretManager, AppRegistrationSecretManager>();
+            builder.Services.AddScoped<IAppRegistrationSecretManager, AppRegistrationSecretManager>();
 
             builder.Services.Configure<AppRegistrationSecretManagerOptions>(opt =>
             {
-                opt.EmailSender = emailSender;
-
                 foreach (var recipientEmailAddress in recipientEmailAddresses)
                 {
                     opt.EmailRecipients.Add(recipientEmailAddress);

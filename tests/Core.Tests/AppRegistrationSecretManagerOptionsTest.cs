@@ -6,8 +6,6 @@
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
 {
-    using PosInformatique.Foundations.EmailAddresses;
-
     public class AppRegistrationSecretManagerOptionsTest
     {
         [Fact]
@@ -15,20 +13,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Tests
         {
             var options = new AppRegistrationSecretManagerOptions();
 
-            options.EmailSender.Should().BeNull();
             options.EmailRecipients.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void EmailSender_ValueChanged()
-        {
-            var options = new AppRegistrationSecretManagerOptions();
-
-            var sender = EmailAddress.Parse("email@domain.com");
-
-            options.EmailSender = sender;
-
-            options.EmailSender.Should().Be(sender);
         }
     }
 }

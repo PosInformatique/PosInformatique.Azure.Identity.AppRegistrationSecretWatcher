@@ -15,8 +15,6 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
             this.EmailRecipients = new Collection<EmailAddress>();
         }
 
-        public EmailAddress EmailSender { get; set; } = default!;
-
         public Collection<EmailAddress> EmailRecipients { get; }
     }
 }

@@ -8,11 +8,16 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 {
     public class AppRegistrationSecretCheckResult
     {
-        public AppRegistrationSecretCheckResult(IReadOnlyList<AppRegistrationSecretCheckResultTenant> tenants)
+        public AppRegistrationSecretCheckResult(IReadOnlyList<AppRegistrationSecretCheckResultTenant> tenants, DateTime dateTime)
         {
+            Guard.IsUtc(dateTime, nameof(dateTime));
+
+            this.DateTime = dateTime;
             this.Tenants = new ReadOnlyCollection<AppRegistrationSecretCheckResultTenant>(tenants.ToArray());
         }
 
         public ReadOnlyCollection<AppRegistrationSecretCheckResultTenant> Tenants { get; }
+
+        public DateTime DateTime { get; }
     }
 }
