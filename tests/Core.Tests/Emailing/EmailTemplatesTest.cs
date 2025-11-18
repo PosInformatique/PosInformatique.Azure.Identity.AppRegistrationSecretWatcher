@@ -80,7 +80,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.T
 
             var content = await RazorTemplateTools.RenderAsync<ReportEmailTemplateSubject>(checkResult, serviceCollection);
 
-            content.Should().Be("Reminder: App Registration secrets expiring soon - [02/01/2025]");
+            content.Should().Be("Entra ID app registrations secret expiration report - [02/01/2025]");
         }
     }
 }
