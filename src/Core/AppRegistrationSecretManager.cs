@@ -117,6 +117,11 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
                 email.Recipients.Add(recipient, string.Empty, result);
             }
 
+            if (result.HasExpiredSecrets)
+            {
+                email.Importance = EmailImportance.High;
+            }
+
             await this.emailManager.SendAsync(email, cancellationToken);
         }
     }

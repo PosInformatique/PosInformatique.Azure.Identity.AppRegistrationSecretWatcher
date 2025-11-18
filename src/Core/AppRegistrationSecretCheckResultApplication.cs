@@ -20,5 +20,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
         public string DisplayName { get; }
 
         public ReadOnlyCollection<AppRegistrationSecretCheckResultApplicationSecret> Secrets { get; }
+
+        public bool HasExpiredSecrets => this.Secrets.Any(s => s.Status == AppRegistrationSecretStatus.Expired);
     }
 }
