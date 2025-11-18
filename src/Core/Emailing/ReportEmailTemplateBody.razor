@@ -11,6 +11,38 @@
             color: #333;
         }
 
+        .summary {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .summary-indicators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .summary-indicator {
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .summary-indicator-label {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .summary-indicator-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
         .tenant {
             margin-bottom: 15px;
             padding: 15px;
@@ -120,6 +152,24 @@
 </head>
 <body>
     <h1>Entra ID app registrations secret expiration report</h1>
+
+    <div class="summary">
+        <h2>Summary</h2>
+        <div class="summary-indicators">
+            <div class="summary-indicator expired">
+                <div class="summary-indicator-value">@Model.Tenants.SelectMany(t => t.Applications).SelectMany(a => a.Secrets).Count(s => s.Status == AppRegistrationSecretStatus.Expired)</div>
+                <div class="summary-indicator-label">Expired</div>
+            </div>
+            <div class="summary-indicator expiring-soon">
+                <div class="summary-indicator-value">@Model.Tenants.SelectMany(t => t.Applications).SelectMany(a => a.Secrets).Count(s => s.Status == AppRegistrationSecretStatus.ExpiringSoon)</div>
+                <div class="summary-indicator-label">Expiring Soon</div>
+            </div>
+            <div class="summary-indicator valid">
+                <div class="summary-indicator-value">@Model.Tenants.SelectMany(t => t.Applications).SelectMany(a => a.Secrets).Count(s => s.Status == AppRegistrationSecretStatus.Valid)</div>
+                <div class="summary-indicator-label">Valid</div>
+            </div>
+        </div>
+    </div>
 
     @foreach (var tenant in this.Model.Tenants)
     {
