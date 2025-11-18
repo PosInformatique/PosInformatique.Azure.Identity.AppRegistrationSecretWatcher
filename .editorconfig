@@ -101,7 +101,7 @@ dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1602.severity = none
 
 # Verify
-[*.{received,verified}.{txt}]
+[*.{received,verified}.{html}]
 charset = utf-8-bom
 end_of_line = lf
 indent_size = unset
