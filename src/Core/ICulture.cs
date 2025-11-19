@@ -1,13 +1,15 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IEmailProvider.cs" company="P.O.S Informatique">
+// <copyright file="ICulture.cs" company="P.O.S Informatique">
 //     Copyright (c) P.O.S Informatique. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace PosInformatique.Foundations.Emailing
+namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher
 {
-    public interface IEmailProvider
+    using System.Globalization;
+
+    public interface ICulture
     {
-        Task SendAsync(EmailMessage message, CancellationToken cancellationToken = default);
+        CultureInfo Current { get; }
     }
 }

@@ -1,15 +1,18 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="ScribanEmailGeneratorTest.cs" company="P.O.S Informatique">
+// <copyright file="EmailTemplatesTest.cs" company="P.O.S Informatique">
 //     Copyright (c) P.O.S Informatique. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.Tests
 {
-    public class ScribanEmailGeneratorTest
+    using System.Globalization;
+    using Microsoft.Extensions.DependencyInjection;
+
+    public class EmailTemplatesTest
     {
         [Fact]
-        public async Task GenerateAsync()
+        public async Task ReportEmailTemplateBody_Render()
         {
             var checkResult = new AppRegistrationSecretCheckResult(
             [
@@ -57,13 +60,42 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.T
                     "Id 3",
                     "The tenant 3",
                     []),
-            ]);
+            ],
+            new DateTime(2025, 1, 2, 3, 4, 5, 6, DateTimeKind.Utc));
 
-            var generator = new ScribanEmailGenerator();
+            var culture = new Mock<ICulture>(MockBehavior.Strict);
+            culture.Setup(c => c.Current)
+                .Returns(new CultureInfo("fr"));
 
-            var content = await generator.GenerateAsync(checkResult, CancellationToken.None);
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(culture.Object);
 
-            await Verify(content);
+            var content = await RazorTemplateTools.RenderAsync<ReportEmailTemplateBody>(checkResult, serviceCollection);
+
+            await Verify(content, "html");
+
+            culture.VerifyAll();
+        }
+
+        [Fact]
+        public async Task ReportEmailTemplateSubject_Render()
+        {
+            var checkResult = new AppRegistrationSecretCheckResult(
+                [],
+                new DateTime(2025, 1, 2, 3, 4, 5, 6, DateTimeKind.Utc));
+
+            var culture = new Mock<ICulture>(MockBehavior.Strict);
+            culture.Setup(c => c.Current)
+                .Returns(new CultureInfo("fr"));
+
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(culture.Object);
+
+            var content = await RazorTemplateTools.RenderAsync<ReportEmailTemplateSubject>(checkResult, serviceCollection);
+
+            content.Should().Be("Entra ID app registrations secret expiration report - [02/01/2025]");
+
+            culture.VerifyAll();
         }
     }
 }

@@ -1,0 +1,4 @@
+﻿@namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing
+@inherits RazorEmailTemplateSubject<AppRegistrationSecretCheckResult>
+@inject ICulture Culture
+Entra ID app registrations secret expiration report - [@this.Model.DateTime.ToString("d", this.Culture.Current)]

@@ -1,0 +1,301 @@
+﻿<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .summary {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .summary h2 {
+            margin-top: 0px;
+            margin-bottom: 4px;
+        }
+
+        .summary-indicators {
+            background-color: #ffffff;
+            border-radius: 8px;
+        }
+
+        .summary-indicator {
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .summary-indicator-label {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .summary-indicator-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .tenant {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tenant h2 {
+            margin-top: 0px;
+            margin-bottom: 4px;
+        }
+
+        .tenant-metadata {
+            margin-bottom: 2px;
+            margin-left: 8px;
+            font-size: 0.75em;
+            line-height: 1.4;
+        }
+
+        .tenant-content {
+            background-color: #f9f9fc;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .application {
+            background-color: #f2f2f2;
+            margin-left: 2px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            padding: 6px
+        }
+
+        .application h3 {
+            margin-top: 2px;
+            margin-bottom: 6px;
+        }
+
+        .application-content {
+            padding: 2px;
+            border-radius: 6px;
+        }
+
+        .application-metadata {
+            margin-bottom: 15px;
+            margin-left: 8px;
+            font-size: 0.75em;
+            line-height: 1.4;
+        }
+
+        .secret {
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .secret h4 {
+            margin-top: 2px;
+            margin-bottom: 10px;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .secret-content {
+            margin-left: 2px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .expired {
+            background-color: #ffd6d6;
+        }
+
+        .expiring-soon {
+            background-color: #fff3cd;
+        }
+
+        .valid {
+            background-color: #d7f9d7;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 8px 16px;
+            align-items: center;
+            margin: 0.5em 0;
+            font-size: 0.85em;
+        }
+
+        .info-label {
+            color: #555;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Entra ID app registrations secret expiration report</h1>
+    <div class="summary">
+        <h2>Summary</h2>
+        <div class="summary-indicators">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="33%" align="center" style="padding: 8px;">
+                        <div class="summary-indicator expired">
+                            <div class="summary-indicator-value">1</div>
+                            <div class="summary-indicator-label">Expired</div>
+                        </div>
+                    </td>
+                    <td width="33%" align="center" style="padding: 8px;">
+                        <div class="summary-indicator expiring-soon">
+                            <div class="summary-indicator-value">1</div>
+                            <div class="summary-indicator-label">Expiring Soon</div>
+                        </div>
+                    </td>
+                    <td width="33%" align="center" style="padding: 8px;">
+                        <div class="summary-indicator valid">
+                            <div class="summary-indicator-value">4</div>
+                            <div class="summary-indicator-label">Valid</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="tenant">
+        <h2>Contoso Corp</h2>
+        <div class="tenant-metadata">
+            <div><span class="label">ID:</span> dc243e7b-979c-4d91-8f81-ba3cc4b7c4dc</div>
+        </div>
+        <div class="tenant-content">
+            <div class="application">
+                <h3>Human Resources</h3>
+                <div class="application-metadata">
+                    <div><span class="label">ID:</span> c44d4cd2-2be2-49f8-bb1f-4b42886c193e</div>
+                </div>
+                <div class="application-content">
+                    <div class="secret expired">
+                        <h4>Secret first semester</h4>
+                        <div class="secret-content">
+                            <div class="info-row">
+                                <div class="info-label">Status:</div>
+                                <div class="info-value"><span class="status">Expired</span></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Expiration date:</div>
+                                <div class="info-value">1-Jan-2025</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Expired since:</div>
+                                <div class="info-value">10 days</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="secret valid">
+                        <h4>Auto generated secret</h4>
+                        <div class="secret-content">
+                            <div class="info-row">
+                                <div class="info-label">Status:</div>
+                                <div class="info-value"><span class="status">Valid</span></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Expiration date:</div>
+                                <div class="info-value">15-Sep-2025</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Days before expiration:</div>
+                                <div class="info-value">20 days</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="application">
+                <h3>Web portal</h3>
+                <div class="application-metadata">
+                    <div><span class="label">ID:</span> ca451ec0-039c-43a2-8c37-c0138f7d93af</div>
+                </div>
+                <div class="application-content">
+                    <div class="secret">No secret</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tenant">
+        <h2>Customers Identity</h2>
+        <div class="tenant-metadata">
+            <div><span class="label">ID:</span> 3998367a-af57-41eb-842b-7346c01eb980</div>
+        </div>
+        <div class="tenant-content">
+            <div class="application">
+                <h3>Sales Frontend</h3>
+                <div class="application-metadata">
+                    <div><span class="label">ID:</span> b11ff682-1449-4ba1-96ee-d38d1e216a56</div>
+                </div>
+                <div class="application-content">
+                    <div class="secret expiring-soon">
+                        <h4>Generated by Terraform</h4>
+                        <div class="secret-content">
+                            <div class="info-row">
+                                <div class="info-label">Status:</div>
+                                <div class="info-value"><span class="status">ExpiringSoon</span></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Expiration date:</div>
+                                <div class="info-value">5-Feb-2025</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Days before expiration:</div>
+                                <div class="info-value">50 days</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="application">
+                <h3>Sales Backend</h3>
+                <div class="application-metadata">
+                    <div><span class="label">ID:</span> 15497b73-656c-42f5-bcc3-4af8042c0e6a</div>
+                </div>
+                <div class="application-content">
+                    <div class="secret valid">
+                        <h4>Secret 2-1-1</h4>
+                        <div class="secret-content">
+                            <div class="info-row">
+                                <div class="info-label">Status:</div>
+                                <div class="info-value"><span class="status">Valid</span></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Expiration date:</div>
+                                <div class="info-value">6-juin-2025</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Days before expiration:</div>
+                                <div class="info-value">60 days</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
