@@ -46,6 +46,8 @@ To send the e-mail using Graph API:
   Client ID of the App Registration used to query secrets across tenants. If omitted, the Function managed identity is used (single-tenant only).
 - `APP_SECRET_WATCHER_CLIENT_SECRET`:
   Client secret of the App Registration. Not required if using managed identity or certificate auth.
+- `APP_SECRET_WATCHER_CULTURE`:
+  Culture name used to format the dates and times for the reports. (`en-US` will be used if not specified).
 - `APP_SECRET_WATCHER_EXPIRATION_THRESHOLD`:
   Time span threshold to raise warnings before secret expiration. Example: `30.00:00:00` for 30 days.
 - `APP_SECRET_WATCHER_FREQUENCY`:

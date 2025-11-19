@@ -82,10 +82,26 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions
                 expirationThreshold = expirationThresholdParsed;
             }
 
+            // Check the APP_SECRET_WATCHER_CULTURE
+            var cultureName = "en-US";
+
+            if (!string.IsNullOrWhiteSpace(builder.Configuration["APP_SECRET_WATCHER_CULTURE"]))
+            {
+                var cultureNameSettings = builder.Configuration["APP_SECRET_WATCHER_CULTURE"]!;
+
+                if (!CultureInfo.GetCultures(CultureTypes.AllCultures).Any(c => c.Name.Equals(cultureNameSettings, StringComparison.Ordinal)))
+                {
+                    throw new InvalidOperationException("The culture specified for the app registrations watcher is invalid (Invalid setting: APP_SECRET_WATCHER_CULTURE).");
+                }
+
+                cultureName = cultureNameSettings;
+            }
+
             builder.ConfigureFunctionsWebApplication();
 
             // Infrastructure
             builder.Services.AddSingleton(TimeProvider.System);
+            builder.Services.AddSingleton<ICulture>(new FixedCulture(cultureName));
 
             // Add Application Insights
             builder.Services

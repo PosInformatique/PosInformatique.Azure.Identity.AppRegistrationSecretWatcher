@@ -6,6 +6,7 @@
 
 namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.Tests
 {
+    using System.Globalization;
     using Microsoft.Extensions.DependencyInjection;
 
     public class EmailTemplatesTest
@@ -62,11 +63,18 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.T
             ],
             new DateTime(2025, 1, 2, 3, 4, 5, 6, DateTimeKind.Utc));
 
+            var culture = new Mock<ICulture>(MockBehavior.Strict);
+            culture.Setup(c => c.Current)
+                .Returns(new CultureInfo("fr"));
+
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(culture.Object);
 
             var content = await RazorTemplateTools.RenderAsync<ReportEmailTemplateBody>(checkResult, serviceCollection);
 
             await Verify(content, "html");
+
+            culture.VerifyAll();
         }
 
         [Fact]
@@ -76,11 +84,18 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing.T
                 [],
                 new DateTime(2025, 1, 2, 3, 4, 5, 6, DateTimeKind.Utc));
 
+            var culture = new Mock<ICulture>(MockBehavior.Strict);
+            culture.Setup(c => c.Current)
+                .Returns(new CultureInfo("fr"));
+
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(culture.Object);
 
             var content = await RazorTemplateTools.RenderAsync<ReportEmailTemplateSubject>(checkResult, serviceCollection);
 
             content.Should().Be("Entra ID app registrations secret expiration report - [02/01/2025]");
+
+            culture.VerifyAll();
         }
     }
 }

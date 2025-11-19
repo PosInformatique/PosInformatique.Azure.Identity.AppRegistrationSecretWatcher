@@ -1,5 +1,6 @@
 ﻿@namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing
 @inherits RazorEmailTemplateBody<AppRegistrationSecretCheckResult>
+@inject ICulture Culture
 
 <html>
 <head>
@@ -230,7 +231,7 @@
                                                 </div>
                                                 <div class="info-row">
                                                     <div class="info-label">Expiration date:</div>
-                                                    <div class="info-value">@secret.EndDate.ToString("d-MMM-yyyy")</div>
+                                                    <div class="info-value">@secret.EndDate.ToString("d-MMM-yyyy", this.Culture.Current)</div>
                                                 </div>
                                                 <div class="info-row">
                                                     @if (secret.DaysBeforeExpiration > 0)
