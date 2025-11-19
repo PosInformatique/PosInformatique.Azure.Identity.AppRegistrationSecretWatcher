@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <!-- Versions of the packages -->
-    <PosInformationFoundationsVersion>1.0.0-rc.4</PosInformationFoundationsVersion>
+    <PosInformationFoundationsVersion>1.0.0</PosInformationFoundationsVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Azure.Identity" Version="1.17.0" />
