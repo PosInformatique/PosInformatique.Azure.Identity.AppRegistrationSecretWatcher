@@ -6,8 +6,13 @@ executable with the monitoring logic already packaged.
 ## Features
 - Monitor secrets across one or multiple Entra ID tenants (Entra ID, Azure B2C, Entra External ID,...).
 - Send a consolidated report at a customizable interval (cron-based).
+- Quick summary with the number of secrets valid, expired and expiring soon.
+- Customizable threshold of expiration date for the secrets.
+- Date/Time formatting customizable to avoid issued between US / European expiration date formats.
 - Simple deployment to Azure Functions (pre-packaged, no build/CD required).
 - Runs on Azure Functions Consumption plan (**NO COST!!!**).
+
+![Report example](./docs/ReportExample.png)
 
 ## How it works
 - Enumerates App Registrations and checks client secrets and certificates nearing expiration.
