@@ -26,7 +26,7 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.EntraId
 
             if (this.options.ClientId is null)
             {
-                credential = new ManagedIdentityCredential();
+                credential = new ManagedIdentityCredential(new ManagedIdentityCredentialOptions());
             }
             else
             {
