@@ -8,8 +8,10 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions
 {
     using System.Globalization;
     using global::Azure.Identity;
+    using global::Azure.Monitor.OpenTelemetry.Exporter;
     using Microsoft.Azure.Functions.Worker;
     using Microsoft.Azure.Functions.Worker.Builder;
+    using Microsoft.Azure.Functions.Worker.OpenTelemetry;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Emailing;
@@ -105,8 +107,9 @@ namespace PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.Functions
 
             // Add Application Insights
             builder.Services
-                .AddApplicationInsightsTelemetryWorkerService()
-                .ConfigureFunctionsApplicationInsights();
+                .AddOpenTelemetry()
+                .UseFunctionsWorkerDefaults()
+                .UseAzureMonitorExporter();
 
             // Emailing
             builder.Services.AddEmailing(opt =>
