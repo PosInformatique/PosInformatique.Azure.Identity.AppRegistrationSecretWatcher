@@ -15,7 +15,7 @@ namespace PosInformatique
 
     public static class RazorTemplateTools
     {
-        /*public static void DisplayHtmlPage(string content, string testName)
+        public static void DisplayHtmlPage(string content, string testName)
         {
             if (!Debugger.IsAttached)
             {
@@ -37,7 +37,7 @@ namespace PosInformatique
                 FileName = temporaryFile,
                 UseShellExecute = true,
             });
-        }*/
+        }
 
         public static async Task<string> RenderAsync<TComponent>(object model, IServiceCollection services)
             where TComponent : ComponentBase

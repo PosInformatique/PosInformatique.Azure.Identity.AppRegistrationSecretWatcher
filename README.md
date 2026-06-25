@@ -47,6 +47,8 @@ To send the e-mail using Graph API:
 
 ### Configuration
 
+- `APPLICATIONINSIGHTS_CONNECTION_STRING`:
+  Application Insights connection string to enable telemetry.
 - `APP_SECRET_WATCHER_CLIENT_ID`:
   Client ID of the App Registration used to query secrets across tenants. If omitted, the Function managed identity is used (single-tenant only).
 - `APP_SECRET_WATCHER_CLIENT_SECRET`:
@@ -115,5 +117,5 @@ to send mail via Graph withb the `Mail.Send` application permission.
 - Ensure recipients are a monitored distribution list or shared mailbox to avoid missed alerts.
 
 ## Compatibility
-- .NET: 9.0
+- .NET: 10.0
 - Azure Functions: Isolated v4

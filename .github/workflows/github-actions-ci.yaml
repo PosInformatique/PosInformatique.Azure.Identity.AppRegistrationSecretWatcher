@@ -10,10 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.x
 
@@ -25,10 +25,14 @@ jobs:
 
       - name: Run tests
         run: |
-          dotnet test PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.slnx \
+          dotnet test \
+          --solution PosInformatique.Azure.Identity.AppRegistrationSecretWatcher.slnx \
           --configuration Release \
           --no-build \
-          --logger "trx;LogFileName=test_results.trx" \
+          --coverage \
+          --coverage-output-format cobertura \
+          --coverage-settings CodeCoverage.runsettings \
+          --report-trx \
           --results-directory ./TestResults
   
       - name: Publish Test Results
